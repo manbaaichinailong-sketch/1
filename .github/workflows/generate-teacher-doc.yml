@@ -1,0 +1,33 @@
+name: Generate Teacher Project Brief
+
+on:
+  push:
+    paths:
+      - "generate_teacher_doc.py"
+      - ".github/workflows/generate-teacher-doc.yml"
+  workflow_dispatch:
+
+jobs:
+  build-docx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependency
+        run: pip install python-docx
+
+      - name: Generate DOCX
+        run: python generate_teacher_doc.py
+
+      - name: Upload document
+        uses: actions/upload-artifact@v4
+        with:
+          name: teacher-project-brief-docx
+          path: output/*.docx
+          if-no-files-found: error
