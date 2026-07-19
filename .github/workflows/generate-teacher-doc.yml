@@ -5,6 +5,11 @@ on:
     paths:
       - "generate_teacher_doc.py"
       - ".github/workflows/generate-teacher-doc.yml"
+  pull_request:
+    paths:
+      - "generate_teacher_doc.py"
+      - ".github/workflows/generate-teacher-doc.yml"
+      - "trigger-doc-build.txt"
   workflow_dispatch:
 
 jobs:
