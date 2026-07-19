@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>AI驱动的干散货航次利润动态预测系统——教师沟通简版</title>
+<style>
+@page { size: A4; margin: 2.2cm 2.2cm 2.2cm 2.2cm; }
+body { font-family: "Microsoft YaHei", "SimSun", sans-serif; color:#222; line-height:1.65; font-size:11pt; }
+h1 { text-align:center; font-size:22pt; margin:70px 0 8px; color:#17365D; }
+h2 { font-size:15pt; color:#1F4E78; border-bottom:1px solid #A9C4DB; padding-bottom:5px; margin-top:22px; }
+p { margin:8px 0; text-align:justify; }
+.subtitle { text-align:center; font-size:13pt; color:#666; margin-bottom:55px; }
+.box { background:#EEF5FA; border-left:5px solid #1F4E78; padding:12px 15px; margin:14px 0; }
+.key { font-weight:bold; color:#17365D; }
+table { width:100%; border-collapse:collapse; margin:12px 0; }
+th { background:#1F4E78; color:white; padding:8px; border:1px solid #B7C9D6; }
+td { padding:8px; border:1px solid #B7C9D6; vertical-align:top; }
+ul, ol { margin-top:5px; }
+li { margin:4px 0; }
+.formula { text-align:center; font-weight:bold; background:#F7F7F7; border:1px solid #DDD; padding:10px; margin:12px 0; }
+.footer-note { margin-top:24px; padding:10px; background:#FFF8E1; border:1px solid #E5D59B; }
+.small { font-size:9.5pt; color:#666; }
+</style>
+</head>
+<body>
+<h1>AI驱动的干散货航次利润动态预测系统</h1>
+<div class="subtitle">教师沟通简版项目方案</div>
+
+<div class="box">
+<span class="key">项目一句话：</span>整合AIS船舶动态、燃油价格、港口信息和人工确认的商业数据，通过固定公式实时更新航次预计利润，并利用AI完成参数提取、风险解释和报告生成。
+</div>
+
+<h2>一、为什么做这个项目</h2>
+<p>干散货航次利润会同时受到运价、货量、航程、船速、油耗、燃油价格、港口费用、等待时间、租金和佣金等因素影响。传统Excel模型通常依赖人工录入，数据更新慢，而且市场参考数据、模型估算数据和最终实际数据容易混在一起。</p>
+<p>本项目希望解决的核心问题是：<strong>如何在数据并不完全真实、实时和统一的情况下，持续得到一份来源清楚、可复核、能动态更新的航次利润预测。</strong></p>
+
+<h2>二、系统由什么组成</h2>
+<table>
+<tr><th style="width:22%">模块</th><th>主要功能</th></tr>
+<tr><td><strong>数据采集层</strong></td><td>接入VesselFinder、MarineTraffic/Kpler、Spire等专业平台，获取船位、航速、航向、ETA和抵离港事件；同时获取燃油市场价格、天气、港口拥堵及部分公开收费信息。</td></tr>
+<tr><td><strong>人工数据层</strong></td><td>录入运价、货量、租金、实际油耗、PDA/FDA、拖轮费、引航费、代理费及其他无法公开获取的商业数据。</td></tr>
+<tr><td><strong>计算引擎</strong></td><td>使用Excel或Python固定公式计算航次天数、燃油成本、港口成本、租金、利润、TCE和保本运价。核心计算不交给AI自由生成。</td></tr>
+<tr><td><strong>AI分析层</strong></td><td>从自然语言、邮件或业务记录中提取参数，检查缺失项，调用计算引擎，对比不同方案，解释利润变化并生成风险提示和分析报告。</td></tr>
+</table>
+
+<div class="formula">航次利润 ＝ 运费收入 − 佣金 − 燃油成本 − 港口及其他费用 − 租金成本</div>
+
+<h2>三、利润结果分三个阶段</h2>
+<ol>
+<li><strong>Estimated P&amp;L：</strong>航次开始前，根据市场油价、预计航程、标准油耗和预计港口费用得到初始估算。</li>
+<li><strong>Forecast P&amp;L：</strong>航次执行中，根据AIS船位、实际航速、实际等待时间、最新PDA和已确认费用持续更新。</li>
+<li><strong>Actual P&amp;L：</strong>航次结束后，使用实际燃油发票、FDA、实际租金天数、佣金和滞期费等进行最终核算。</li>
+</ol>
+<p>因此，系统在航次结束前输出的是<strong>动态预测利润</strong>，而不是声称已经得到最终实际利润。</p>
+
+<h2>四、怎样解决数据不可靠问题</h2>
+<p>每一项数据必须保存以下信息：</p>
+<ul>
+<li>数据来源；</li>
+<li>获取或更新时间；</li>
+<li>数据类型：实际值、确认值、市场参考值或模型估算值；</li>
+<li>可信等级；</li>
+<li>是否已经人工核实。</li>
+</ul>
+<p>数据采用以下优先级：</p>
+<div class="box"><strong>最终账单和发票 ＞ 已确认业务数据/PDA ＞ 专业API数据 ＞ 公开市场数据 ＞ 模型估算数据</strong></div>
+<p>过期数据自动标记；缺少来源的数据不进入正式计算。系统同时展示利润基准值、可能区间、数据完整度和最大不确定因素。</p>
+
+<h2>五、华海实习能提供什么</h2>
+<p>实习期间主要记录非敏感的业务结构和时间节点，例如ETA、实际到港、靠泊、开工、完工、离港、等泊时间、装卸效率、延误原因、费用类别和代理协调方式。</p>
+<p>不复制企业邮件、合同、客户名称、实际报价和内部账单。用于项目展示时，将船名、客户、日期和金额进行匿名化或比例调整。</p>
+
+<h2>六、项目实施步骤</h2>
+<table>
+<tr><th>阶段</th><th>成果</th></tr>
+<tr><td>第一阶段</td><td>完成Excel航次估算模型，计算利润、TCE、保本运价及敏感性分析。</td></tr>
+<tr><td>第二阶段</td><td>使用Python重建计算引擎，保证公式标准化和可复核。</td></tr>
+<tr><td>第三阶段</td><td>接入单艘船AIS数据、航线距离和燃油参考价格。</td></tr>
+<tr><td>第四阶段</td><td>使用Streamlit建立网页界面，展示船舶动态、利润变化和数据可信度。</td></tr>
+<tr><td>第五阶段</td><td>加入AI参数提取、缺失检查、风险解释和自动报告功能。</td></tr>
+</table>
+
+<h2>七、预期成果</h2>
+<ul>
+<li>航次估算Excel模型；</li>
+<li>Python航次利润计算程序；</li>
+<li>AIS及市场数据接口模块；</li>
+<li>航次利润动态预测网页；</li>
+<li>AI航次分析助手；</li>
+<li>脱敏港口作业案例和研究报告；</li>
+<li>完整GitHub项目仓库。</li>
+</ul>
+
+<h2>八、希望向老师请教的问题</h2>
+<ol>
+<li>学校是否可以提供AIS或专业航运数据库账号？</li>
+<li>是否可以申请MarineTraffic、Kpler、Spire、Veson等平台的学术试用？</li>
+<li>航次利润模型应采用哪些行业标准和验证方式？</li>
+<li>实习数据应如何脱敏，才能兼顾研究价值和企业保密要求？</li>
+<li>该项目是否适合作为创新创业、学科竞赛或毕业论文方向？</li>
+</ol>
+
+<div class="footer-note">
+<strong>项目定位：</strong>本项目不是让AI“猜利润”，而是建立一个数据来源可追溯、计算公式可核验、预测结果可持续更新的航次经营决策辅助工具。
+</div>
+<p class="small">文档用途：与指导教师进行项目可行性和研究方向讨论。</p>
+</body>
+</html>
